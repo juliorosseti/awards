@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "shardulm94.trailing-spaces",
+    "esbenp.prettier-vscode",
+    "eamodio.gitlens",
+    "ms-azuretools.vscode-docker"
+  ]
+}

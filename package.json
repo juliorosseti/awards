@@ -1,0 +1,17 @@
+{
+  "name": "awards",
+  "description": "",
+  "version": "1.0.0",
+  "main": "application.js",
+  "scripts": {
+    "tests_unit": "exit 1",
+    "tests_integration": "exit 1"
+  },
+  "author": "Júlio Rosseti <julio@rosseti.xyz>",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "memorystore": "^1.6.7"
+  }
+}

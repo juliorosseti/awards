@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  api_awards:
+    container_name: container_awards
+    image: image_awards:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../:/app
+      - /app/node_modules
+
