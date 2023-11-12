@@ -1,6 +1,6 @@
 const express = require("express");
 const routes = require("./src/main/routes");
-const migration = require("./src/main/database/migration");
+const migration = require("./src/main/databases/migration");
 const port = 3000;
 
 const app = express();

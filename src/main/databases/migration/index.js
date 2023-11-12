@@ -1,6 +1,6 @@
 const path = require("node:path");
 const sequelize = require("../Database");
-const csvHelper = require("../../helper/csv");
+const csvHelper = require("../../helpers/csv");
 const MovielistModel = require("../models/Movielist");
 
 const importCsv = async (csvPath) => {

@@ -1,6 +1,6 @@
 {
   "name": "awards",
-  "description": "",
+  "description": "A RESTful API to facilitate the reading and analysis of the list of nominees and winners in the Worst Film category of the Golden Raspberry Awards.",
   "version": "1.0.0",
   "main": "application.js",
   "scripts": {

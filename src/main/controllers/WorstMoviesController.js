@@ -1,5 +1,5 @@
-const MovielistModel = require("../database/models/Movielist");
-const WorstMoviesUsecase = require("../usecase/WorstMoviesUsecase");
+const MovielistModel = require("../databases/models/Movielist");
+const WorstMoviesUsecase = require("../usecases/WorstMoviesUsecase");
 
 module.exports = WorstMoviesController = {
   home: async (req, res) => {
