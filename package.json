@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "main": "application.js",
   "scripts": {
-    "tests_unit": "exit 1",
-    "tests_integration": "exit 1"
+    "tests_unit": "node --test **/*.spec.js",
+    "tests_integration": "TEST_MODE=true PORT=3030 && npx mocha src/tests/integration/WorstMovies.js"
   },
   "author": "Júlio Rosseti <julio@rosseti.xyz>",
   "license": "ISC",
@@ -13,5 +13,10 @@
     "express": "^4.18.2",
     "sequelize": "^6.34.0",
     "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "chai": "^4.3.10",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.3"
   }
 }

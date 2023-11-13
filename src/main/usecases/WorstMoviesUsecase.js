@@ -34,11 +34,13 @@ const getProducersByMovieYear = (movielist) => {
   const output = {};
 
   movielist.forEach((movie) => {
-    if (!output[movie.producer]) {
-      output[movie.producer] = [];
-    }
+    if (movie.producer) {
+      if (!output[movie.producer]) {
+        output[movie.producer] = [];
+      }
 
-    output[movie.producer].push(movie.year);
+      output[movie.producer].push(movie.year);
+    }
   });
 
   return output;

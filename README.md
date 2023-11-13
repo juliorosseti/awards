@@ -10,7 +10,7 @@
 </h3>
 <br />
 
-We have developed a RESTful API to facilitate the reading and analysis of the list of nominees and winners in the Worst Movies category of the Golden Raspberry Awards. The application meets a series of functional and non-functional requirements to ensure efficiency, ease of use, and data integrity.
+A RESTful API to facilitate the reading and analysis of the list of nominees and winners in the Worst Movies category of the Golden Raspberry Awards. The application meets a series of functional and non-functional requirements to ensure efficiency, ease of use, and data integrity.
 
 ## Project technologies
 
@@ -48,3 +48,19 @@ $ make up
 #### URL to access the endpoint API
 
 http://localhost:3000
+
+## Tests
+
+A prerequisite for running both tests is to have the application container running. Please follow the steps in the [#setup](#setup) section to have a running container.
+
+#### Unit tests
+
+```bash
+$ make tests_unit
+```
+
+#### Integration tests
+
+```bash
+$ make tests_integration
+```
