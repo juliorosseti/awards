@@ -6,6 +6,7 @@ const {
   getProducersByMovieYear,
   getMovielistByProducers,
   getIntervalProducersByYear,
+  getProducersByInterval,
   getMinAndMaxProducerWinnersByInterval,
 } = require("../../../main/usecases/WorstMoviesUsecase");
 
@@ -185,7 +186,7 @@ describe("Given WorstMovies starts", () => {
   describe("When getIntervalProducersByYear is called", () => {
     it("Then should return an empty object if the input producersByYear is empty", () => {
       const result = getIntervalProducersByYear({});
-      assert.deepEqual(result, {});
+      assert.deepEqual(result, []);
     });
 
     it("Then should handle producers with only one win", () => {
@@ -196,7 +197,7 @@ describe("Given WorstMovies starts", () => {
 
       const result = getIntervalProducersByYear(producersByYear);
 
-      assert.deepEqual(result, {});
+      assert.deepEqual(result, []);
     });
 
     it("Then should handle producers with no wins", () => {
@@ -207,7 +208,7 @@ describe("Given WorstMovies starts", () => {
 
       const result = getIntervalProducersByYear(producersByYear);
 
-      assert.deepEqual(result, {});
+      assert.deepEqual(result, []);
     });
 
     it("Then should calculate intervals between consecutive wins for producers with two or more wins", () => {
@@ -219,47 +220,196 @@ describe("Given WorstMovies starts", () => {
 
       const result = getIntervalProducersByYear(producersByYear);
 
+      assert.deepEqual(result, [
+        {
+          producer: "Producer1",
+          interval: 2,
+          previousWin: 2000,
+          followingWin: 2002,
+        },
+        {
+          producer: "Producer1",
+          interval: 3,
+          previousWin: 2002,
+          followingWin: 2005,
+        },
+        {
+          producer: "Producer2",
+          interval: 2,
+          previousWin: 2001,
+          followingWin: 2003,
+        },
+        {
+          producer: "Producer2",
+          interval: 3,
+          previousWin: 2003,
+          followingWin: 2006,
+        },
+        {
+          producer: "Producer2",
+          interval: 3,
+          previousWin: 2006,
+          followingWin: 2009,
+        },
+        {
+          producer: "Producer3",
+          interval: 3,
+          previousWin: 2004,
+          followingWin: 2007,
+        },
+      ]);
+    });
+  });
+
+  describe("When getProducersByInterval is called", () => {
+    it("Then should return an empty object if the input producers array is empty", () => {
+      const result = getProducersByInterval([]);
+      assert.deepEqual(result, {});
+    });
+
+    it("Then should group producers correctly by interval", () => {
+      const producers = [
+        {
+          producer: "Producer1",
+          interval: 1,
+          previousWin: 2000,
+          followingWin: 2001,
+        },
+        {
+          producer: "Producer2",
+          interval: 2,
+          previousWin: 2002,
+          followingWin: 2004,
+        },
+        {
+          producer: "Producer1",
+          interval: 1,
+          previousWin: 2005,
+          followingWin: 2006,
+        },
+        {
+          producer: "Producer2",
+          interval: 2,
+          previousWin: 2007,
+          followingWin: 2009,
+        },
+      ];
+
+      const result = getProducersByInterval(producers);
+
       assert.deepEqual(result, {
-        Producer1: [
+        1: [
           {
             producer: "Producer1",
-            interval: 2,
+            interval: 1,
             previousWin: 2000,
-            followingWin: 2002,
+            followingWin: 2001,
           },
           {
             producer: "Producer1",
+            interval: 1,
+            previousWin: 2005,
+            followingWin: 2006,
+          },
+        ],
+        2: [
+          {
+            producer: "Producer2",
+            interval: 2,
+            previousWin: 2002,
+            followingWin: 2004,
+          },
+          {
+            producer: "Producer2",
+            interval: 2,
+            previousWin: 2007,
+            followingWin: 2009,
+          },
+        ],
+      });
+    });
+
+    it("Then should handle producers with different intervals", () => {
+      const producers = [
+        {
+          producer: "Producer1",
+          interval: 1,
+          previousWin: 2000,
+          followingWin: 2001,
+        },
+        {
+          producer: "Producer2",
+          interval: 3,
+          previousWin: 2002,
+          followingWin: 2005,
+        },
+        {
+          producer: "Producer1",
+          interval: 1,
+          previousWin: 2006,
+          followingWin: 2007,
+        },
+        {
+          producer: "Producer2",
+          interval: 3,
+          previousWin: 2008,
+          followingWin: 2011,
+        },
+      ];
+
+      const result = getProducersByInterval(producers);
+
+      assert.deepEqual(result, {
+        1: [
+          {
+            producer: "Producer1",
+            interval: 1,
+            previousWin: 2000,
+            followingWin: 2001,
+          },
+          {
+            producer: "Producer1",
+            interval: 1,
+            previousWin: 2006,
+            followingWin: 2007,
+          },
+        ],
+        3: [
+          {
+            producer: "Producer2",
             interval: 3,
             previousWin: 2002,
             followingWin: 2005,
           },
-        ],
-        Producer2: [
-          {
-            producer: "Producer2",
-            interval: 2,
-            previousWin: 2001,
-            followingWin: 2003,
-          },
           {
             producer: "Producer2",
             interval: 3,
-            previousWin: 2003,
-            followingWin: 2006,
-          },
-          {
-            producer: "Producer2",
-            interval: 3,
-            previousWin: 2006,
-            followingWin: 2009,
+            previousWin: 2008,
+            followingWin: 2011,
           },
         ],
-        Producer3: [
+      });
+    });
+
+    it("Then should handle a single producer", () => {
+      const producers = [
+        {
+          producer: "Producer1",
+          interval: 1,
+          previousWin: 2000,
+          followingWin: 2001,
+        },
+      ];
+
+      const result = getProducersByInterval(producers);
+
+      assert.deepEqual(result, {
+        1: [
           {
-            producer: "Producer3",
-            interval: 3,
-            previousWin: 2004,
-            followingWin: 2007,
+            producer: "Producer1",
+            interval: 1,
+            previousWin: 2000,
+            followingWin: 2001,
           },
         ],
       });
@@ -310,6 +460,18 @@ describe("Given WorstMovies starts", () => {
           winner: 0,
           year: 2001,
         },
+        {
+          title: "Movie7",
+          producers: "Producer3",
+          winner: 1,
+          year: 2010,
+        },
+        {
+          title: "Movie8",
+          producers: "Producer3",
+          winner: 1,
+          year: 2016,
+        },
       ];
 
       const result = getMinAndMaxProducerWinnersByInterval(data);
@@ -332,9 +494,15 @@ describe("Given WorstMovies starts", () => {
         max: [
           {
             producer: "Producer3",
-            interval: 3,
-            previousWin: 2001,
-            followingWin: 2004,
+            interval: 6,
+            previousWin: 2004,
+            followingWin: 2010,
+          },
+          {
+            producer: "Producer3",
+            interval: 6,
+            previousWin: 2010,
+            followingWin: 2016,
           },
         ],
       });

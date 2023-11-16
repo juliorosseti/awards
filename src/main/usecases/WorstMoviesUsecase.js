@@ -76,35 +76,52 @@ const getMovielistByProducers = (movielist) => {
  * and calculates intervals between consecutive winning years.
  *
  * @param {Object} producersByYear - An object where keys are producer names and values are arrays of winning years.
- * @returns {Object} - An object containing information about the intervals between consecutive wins for producers with two or more wins.
+ * @returns {Array} - An array containing objects with information about the intervals between consecutive wins for producers with two or more wins.
  */
 const getIntervalProducersByYear = (producersByYear) => {
-  const output = {};
+  const output = [];
   const producers = Object.keys(producersByYear);
 
   producers.forEach((producer) => {
     const years = producersByYear[producer].sort();
 
     if (years.length >= 2) {
-      output[producer] = years
-        .map((year, idx) => {
-          const nextYear = years[idx + 1];
+      years.forEach((year, idx) => {
+        const nextYear = years[idx + 1];
 
-          if (nextYear) {
-            return {
-              producer,
-              interval: nextYear - year,
-              previousWin: year,
-              followingWin: nextYear,
-            };
-          }
-          return null;
-        })
-        .filter((interval) => interval !== null);
+        if (nextYear) {
+          output.push({
+            producer,
+            interval: nextYear - year,
+            previousWin: year,
+            followingWin: nextYear,
+          });
+        }
+      });
     }
   });
 
   return output;
+};
+
+/**
+ * Organizes a list of producers into groups based on their intervals.
+ *
+ * @param {Array} producers - The list of producers to be processed.
+ * @returns {Object} - An object where keys are intervals and values are arrays of producers with the corresponding interval.
+ */
+const getProducersByInterval = (producers) => {
+  const intervalGroups = {};
+
+  producers.forEach((producer) => {
+    if (!intervalGroups[producer.interval]) {
+      intervalGroups[producer.interval] = [];
+    }
+
+    intervalGroups[producer.interval].push(producer);
+  });
+
+  return intervalGroups;
 };
 
 /**
@@ -115,23 +132,26 @@ const getIntervalProducersByYear = (producersByYear) => {
  * @returns {Object} - An object containing two arrays, `min` and `max`, each holding information about producers with the minimum and maximum intervals.
  */
 const getMinAndMaxProducerWinnersByInterval = (data) => {
-  const min = [],
+  let min = [],
     max = [];
 
   const movielistWinners = getMovielistWinners(data);
   const movielistByProducers = getMovielistByProducers(movielistWinners);
   const producersByMovieYear = getProducersByMovieYear(movielistByProducers);
-  const intervalProducers = getIntervalProducersByYear(producersByMovieYear);
+  const producersByYear = getIntervalProducersByYear(producersByMovieYear);
+  const producersByInterval = getProducersByInterval(producersByYear);
 
-  Object.keys(intervalProducers).forEach((producer) => {
-    intervalProducers[producer].forEach((interval) => {
-      if (interval.interval == 1) {
-        min.push(interval);
-      } else {
-        max.push(interval);
-      }
-    });
-  });
+  const intervals = Object.keys(producersByInterval);
+  const minInterval = 1;
+  const maxInterval = intervals[intervals.length - 1];
+
+  if (producersByInterval[minInterval]) {
+    min = producersByInterval[minInterval];
+  }
+
+  if (producersByInterval[maxInterval] && maxInterval != minInterval) {
+    max = producersByInterval[maxInterval];
+  }
 
   return {
     min,
@@ -145,5 +165,6 @@ module.exports = {
   getProducersByMovieYear,
   getMovielistByProducers,
   getIntervalProducersByYear,
+  getProducersByInterval,
   getMinAndMaxProducerWinnersByInterval,
 };

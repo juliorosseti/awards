@@ -3,11 +3,19 @@ const WorstMoviesUsecase = require("../usecases/WorstMoviesUsecase");
 
 module.exports = WorstMoviesController = {
   home: async (req, res) => {
-    const movies = await MovielistModel.getAll();
+    try {
+      const movies = await MovielistModel.getAll();
 
-    const response =
-      WorstMoviesUsecase.getMinAndMaxProducerWinnersByInterval(movies);
+      const response =
+        WorstMoviesUsecase.getMinAndMaxProducerWinnersByInterval(movies);
 
-    res.json(response);
+      res.json(response);
+    } catch (error) {
+      console.error(
+        `[WorstMoviesController.js:home] Error on getting producers: ${error}`
+      );
+
+      res.status(500).json({ error: "An error has occurred" });
+    }
   },
 };

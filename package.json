@@ -1,11 +1,11 @@
 {
   "name": "awards",
-  "description": "A RESTful API to facilitate the reading and analysis of the list of nominees and winners in the Worst Film category of the Golden Raspberry Awards.",
+  "description": "A RESTful API to facilitate the reading and analysis of the list of nominees and winners in the Worst Movies category of the Golden Raspberry Awards.",
   "version": "1.0.0",
   "main": "application.js",
   "scripts": {
     "tests_unit": "node --test **/*.spec.js",
-    "tests_integration": "TEST_MODE=true PORT=3030 && npx mocha src/tests/integration/WorstMovies.js"
+    "tests_integration": "PORT=3030 && npx mocha src/tests/integration/WorstMovies.js"
   },
   "author": "Júlio Rosseti <julio@rosseti.xyz>",
   "license": "ISC",
